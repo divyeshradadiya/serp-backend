@@ -42,7 +42,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Custom middleware
 app.use(requestLogger);
-app.use(rateLimit(100, 15 * 60 * 1000)); // 100 requests per 15 minutes
+//for now
+// app.use(rateLimit(100, 15 * 60 * 1000)); // 100 requests per 15 minutes
 
 // Routes
 app.use('/', indexRouter);
