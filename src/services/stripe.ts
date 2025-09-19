@@ -24,62 +24,64 @@ export interface CreditPlan {
   description?: string;
 }
 
-// Credit pricing tiers with discount structure
+// Credit pricing tiers with direct credit amounts
 export const CREDIT_PLANS: CreditPlan[] = [
   {
     id: 'starter',
     name: 'Starter',
-    credits: 6250,
-    priceUsd: 500,
+    credits: 6250, // $5 at $0.80 per 1k = 6,250 credits
+    priceUsd: 500, // $5.00 in cents
     discountPercent: 0,
-    description: '$5 - $29 • $0.80/ 1k requests'
+    description: '$5 - $29 • $0.80 / 1k req'
   },
   {
     id: 'standard',
     name: 'Standard',
-    credits: 50000, // $30 * 1250 * 1.333 (33% more)
-    priceUsd: 3000,
+    credits: 46154, // $30 at $0.65 per 1k = 46,154 credits
+    priceUsd: 3000, // $30.00 in cents
     discountPercent: 33,
-    description: '$30 - $99 • $0.60/1k requests'
+    description: '$30 - $99 • $0.65 / 1k req'
   },
   {
     id: 'scale',
     name: 'Scale',
-    credits: 222222, // $100 * 1250 * 1.778 (78% more)
-    priceUsd: 10000,
+    credits: 222222, // $100 at $0.45 per 1k = 222,222 credits
+    priceUsd: 10000, // $100.00 in cents
     discountPercent: 78,
-    description: '$100 - $499 • $0.45/1k requests'
+    description: '$100 - $499 • $0.45 / 1k req'
   },
   {
     id: 'ultimate',
     name: 'Ultimate',
-    credits: 2000000, // $500 * 1250 * 3.2 (220% more)
-    priceUsd: 50000,
+    credits: 1666667, // $500 at $0.30 per 1k = 1,666,667 credits
+    priceUsd: 50000, // $500.00 in cents
     discountPercent: 220,
-    description: '$500 - $2000 • $0.25/1k requests'
+    description: '$500 - $2k • $0.30 / 1k req'
   }
-
 ];
 
 export class StripeService {
   /**
-   * Calculate credits based on amount and discount tier
+   * Calculate credits based on amount with direct pricing tiers
    */
   static calculateCredits(amountUsd: number): { credits: number; discountPercent: number } {
-    const baseCreditsPerUsd = 1250; // $0.00080 per request = 1250 requests per USD
-    
+    // Direct pricing based on dollar amount tiers
     if (amountUsd >= 500 && amountUsd <= 2000) {
-      // Ultimate tier: 220% more credits
-      return { credits: Math.floor(amountUsd * baseCreditsPerUsd * 3.2), discountPercent: 220 };
+      // Ultimate tier: $0.30 per 1k requests
+      const credits = Math.floor((amountUsd / 0.30) * 1000);
+      return { credits, discountPercent: 220 };
     } else if (amountUsd >= 100 && amountUsd <= 499) {
-      // Scale tier: 78% more credits
-      return { credits: Math.floor(amountUsd * baseCreditsPerUsd * 1.778), discountPercent: 78 };
+      // Scale tier: $0.45 per 1k requests
+      const credits = Math.floor((amountUsd / 0.45) * 1000);
+      return { credits, discountPercent: 78 };
     } else if (amountUsd >= 30 && amountUsd <= 99) {
-      // Standard tier: 33% more credits
-      return { credits: Math.floor(amountUsd * baseCreditsPerUsd * 1.333), discountPercent: 33 };
+      // Standard tier: $0.65 per 1k requests
+      const credits = Math.floor((amountUsd / 0.65) * 1000);
+      return { credits, discountPercent: 33 };
     } else if (amountUsd >= 5 && amountUsd <= 29) {
-      // Starter tier: 0% discount, base rate
-      return { credits: Math.floor(amountUsd * baseCreditsPerUsd), discountPercent: 0 };
+      // Starter tier: $0.80 per 1k requests
+      const credits = Math.floor((amountUsd / 0.80) * 1000);
+      return { credits, discountPercent: 0 };
     } else {
       throw new Error('Purchase amount must be between $5 and $2000 USD');
     }

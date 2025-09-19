@@ -46,20 +46,25 @@ export interface SearchOptions {
 export class SearchService {
   // Validate API key and get key record
   async validateApiKey(apiKeyHash: string, organizationId: string) {
-    const keyRecord = await db.select()
-      .from(apiKeys)
-      .where(and(
-        eq(apiKeys.keyHash, apiKeyHash),
-        eq(apiKeys.organizationId, organizationId),
-        eq(apiKeys.isActive, true)
-      ))
-      .limit(1);
+    try {
+      const keyRecord = await db.select()
+        .from(apiKeys)
+        .where(and(
+          eq(apiKeys.keyHash, apiKeyHash),
+          eq(apiKeys.organizationId, organizationId),
+          eq(apiKeys.isActive, true)
+        ))
+        .limit(1);
 
-    if (keyRecord.length === 0) {
-      throw new Error('Invalid or inactive API key');
+      if (keyRecord.length === 0) {
+        throw new Error('Invalid or inactive API key');
+      }
+
+      return keyRecord[0];
+    } catch (error) {
+      console.error('DB Error in validateApiKey:', error);
+      throw new Error('Database connection error. Please try again.');
     }
-
-    return keyRecord[0];
   }
 
   // Check credit balance

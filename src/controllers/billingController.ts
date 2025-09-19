@@ -16,8 +16,8 @@ export class BillingController {
       res.json({ 
         plans,
         currency: 'usd',
-        baseCreditsPerUsd: 1250,
         minimumPurchase: 5,
+        maximumPurchase: 2000,
       });
     } catch (error) {
       console.error('Error fetching pricing plans:', error);
