@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Application } from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import cookieParser from 'cookie-parser';
@@ -19,7 +19,7 @@ import { errorHandler, notFoundHandler, requestLogger, rateLimit } from './src/m
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const app = express();
+const app: Application = express();
 
 // CORS configuration
 app.use(cors({

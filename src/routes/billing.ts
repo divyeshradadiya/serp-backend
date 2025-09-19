@@ -1,8 +1,8 @@
-import express from 'express';
+import express, { Router } from 'express';
 import { BillingController } from '../controllers/billingController';
 import { requireAuth } from '../middleware/auth';
 
-const router = express.Router();
+const router: Router = express.Router();
 
 // Get available pricing plans
 router.get('/pricing-plans', BillingController.getPricingPlans);

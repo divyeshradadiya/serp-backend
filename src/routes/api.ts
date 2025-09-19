@@ -1,7 +1,7 @@
-import express from 'express';
+import express, { Router } from 'express';
 import { ApiController } from '../controllers/apiController';
 
-const router = express.Router();
+const router: Router = express.Router();
 const apiController = new ApiController();
 
 // Middleware to validate API key (simplified for now)

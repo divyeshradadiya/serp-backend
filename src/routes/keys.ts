@@ -1,8 +1,8 @@
-import express from 'express';
+import express, { Router } from 'express';
 import { requireAuth, requireOrganization } from '../middleware/auth';
 import { KeysController } from '../controllers/keysController';
 
-const router = express.Router();
+const router: Router = express.Router();
 const keysController = new KeysController();
 
 // GET / - Get all API keys for an organization

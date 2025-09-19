@@ -1,8 +1,8 @@
-import express from 'express';
+import express, { Router } from 'express';
 import { requireAuth, requireOrganization } from '../middleware/auth';
 import { OverviewController } from '../controllers/overviewController';
 
-const router = express.Router();
+const router: Router = express.Router();
 const overviewController = new OverviewController();
 
 // GET /stats - Get overview statistics

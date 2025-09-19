@@ -1,8 +1,8 @@
-import express from 'express';
+import express, { Router } from 'express';
 import { requireAuth, requireOrganization } from '../middleware/auth';
 import { SearchController } from '../controllers/searchController';
 
-const router = express.Router();
+const router: Router = express.Router();
 const searchController = new SearchController();
 
 // POST /search - Perform a search request

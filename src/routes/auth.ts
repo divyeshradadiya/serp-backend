@@ -1,8 +1,8 @@
-import express from 'express';
+import express, { Router } from 'express';
 import { toNodeHandler } from 'better-auth/node';
 import { auth } from '../auth';
 
-const router = express.Router();
+const router: Router = express.Router();
 
 // Convert Better Auth handler to Node.js compatible handler
 const nodeHandler = toNodeHandler(auth.handler);

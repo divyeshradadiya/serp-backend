@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Router } from 'express';
 import { BlogService } from '../services/blogService';
 import { loginAdmin, authenticateAdmin } from '../middleware/adminAuth';
 
@@ -22,7 +22,7 @@ interface CreateCategoryRequest {
 
 interface UpdateCategoryRequest extends Partial<CreateCategoryRequest> {}
 
-const router = express.Router();
+const router: Router = express.Router();
 
 // Public routes
 router.get('/blogs', async (req, res) => {
