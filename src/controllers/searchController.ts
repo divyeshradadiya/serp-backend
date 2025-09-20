@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import { db } from '../db/index';
 import { auth } from '../auth';
 import { fromNodeHeaders } from 'better-auth/node';
+import { SearchService } from '../services/searchService';
 import {
   apiKeys,
   serpSearchResults,
@@ -243,10 +244,14 @@ export class SearchController {
         console.log(`Found ${results.length} results for query "${searchQuery}"`);
         // Deduct credit and log the request
         try {
+          const searchService = new SearchService();
+          const primaryEngine = Array.isArray(searchEngines) ? searchEngines[0] : searchEngines;
+          const creditsToDeduct = searchService.getCreditCost(primaryEngine);
+          
           await db.update(workspaceCredits)
             .set({
-              balance: (currentCredits.balance || 0) - 1,
-              totalUsed: (currentCredits.totalUsed || 0) + 1,
+              balance: (currentCredits.balance || 0) - creditsToDeduct,
+              totalUsed: (currentCredits.totalUsed || 0) + creditsToDeduct,
               updatedAt: new Date()
             })
             .where(eq(workspaceCredits.organizationId, organizationId));

@@ -260,12 +260,12 @@ export class ApiController {
   }
 
   // Update credit balance after successful search
-  private async deductCredit(organizationId: string) {
+  private async deductCredit(organizationId: string, credits: number = 1) {
     try {
       await db.update(workspaceCredits)
         .set({
-          balance: sql`${workspaceCredits.balance} - 1`,
-          totalUsed: sql`${workspaceCredits.totalUsed} + 1`,
+          balance: sql`${workspaceCredits.balance} - ${credits}`,
+          totalUsed: sql`${workspaceCredits.totalUsed} + ${credits}`,
           updatedAt: new Date()
         })
         .where(eq(workspaceCredits.organizationId, organizationId));
@@ -348,7 +348,15 @@ export class ApiController {
       );
 
       // Update credit balance (always deduct since no caching)
-      await this.deductCredit(apiKey.organizationId);
+      const primaryEngine = searchOptions.engines ? searchOptions.engines[0] : 'google';
+      const creditCosts: Record<string, number> = {
+        'google': 1,
+        'bing': 2,
+        'duckduckgo': 2,
+        'brave': 3
+      };
+      const creditsToDeduct = creditCosts[primaryEngine.toLowerCase()] || 1;
+      await this.deductCredit(apiKey.organizationId, creditsToDeduct);
 
       const responseTime = Date.now() - startTime;
       const creditBalance = (req as any).creditBalance;
@@ -363,8 +371,8 @@ export class ApiController {
           api_version: '1.0',
           instance_used: instance,
           credits: {
-            balance: creditBalance - 1, // Always deduct 1 credit
-            used_for_request: 1, // Always use 1 credit
+            balance: creditBalance - creditsToDeduct,
+            used_for_request: creditsToDeduct,
             rate_limit: (req as any).rateLimit
           }
         }

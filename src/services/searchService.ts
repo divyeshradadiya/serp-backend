@@ -82,12 +82,23 @@ export class SearchService {
     return currentCredits;
   }
 
+  // Get credit cost for a search engine
+  getCreditCost(engine: string): number {
+    const creditCosts: Record<string, number> = {
+      'google': 1,
+      'bing': 2,
+      'duckduckgo': 2,
+      'brave': 3
+    };
+    return creditCosts[engine.toLowerCase()] || 1; // Default to 1 if engine not found
+  }
+
   // Deduct credit from organization
-  async deductCredit(organizationId: string) {
+  async deductCredit(organizationId: string, credits: number = 1) {
     await db.update(workspaceCredits)
       .set({
-        balance: sql`${workspaceCredits.balance} - 1`,
-        totalUsed: sql`${workspaceCredits.totalUsed} + 1`,
+        balance: sql`${workspaceCredits.balance} - ${credits}`,
+        totalUsed: sql`${workspaceCredits.totalUsed} + ${credits}`,
         updatedAt: new Date()
       })
       .where(eq(workspaceCredits.organizationId, organizationId));
