@@ -4,7 +4,7 @@ const router: Router = express.Router();
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
-  res.json({ title: 'SERP API', message: 'Welcome to SERP Scraping API' });
+  res.json({ title: 'Serpex', message: 'Welcome to Serpex API' });
 });
 
 export default router;
