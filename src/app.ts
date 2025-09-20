@@ -5,16 +5,16 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import cors from 'cors';
 
-import indexRouter from './src/routes/index';
-import authRouter from './src/routes/auth';
-import apiRouter from './src/routes/api';
-import keysRouter from './src/routes/keys';
-import overviewRouter from './src/routes/overview';
-import searchRouter from './src/routes/search';
-import billingRouter from './src/routes/billing';
-import blogRouter from './src/routes/blog';
+import indexRouter from './routes/index';
+import authRouter from './routes/auth';
+import apiRouter from './routes/api';
+import keysRouter from './routes/keys';
+import overviewRouter from './routes/overview';
+import searchRouter from './routes/search';
+import billingRouter from './routes/billing';
+import blogRouter from './routes/blog';
 
-import { errorHandler, notFoundHandler, requestLogger, rateLimit } from './src/middleware/auth';
+import { errorHandler, notFoundHandler, requestLogger, rateLimit } from './middleware/auth';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
